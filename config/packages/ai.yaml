@@ -12,7 +12,10 @@ ai:
     agent:
         default:
             platform: 'ai.platform.openrouter'
-            model: '%env(OPENROUTER_MODEL)%'
+            model:
+              name: '%env(OPENROUTER_MODEL)%'
+              options:
+                temperature: 2
         # Agent configuration
         # see https://symfony.com/doc/current/ai/bundles/ai-bundle.html
 

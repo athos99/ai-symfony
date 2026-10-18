@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-docker exec -it php85 bash -c "cd symfony-ux && bash"
+docker exec -it php85 bash -c "cd ai-symfony && bash"
 
 
