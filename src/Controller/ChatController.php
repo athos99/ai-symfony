@@ -18,17 +18,18 @@ class ChatController extends AbstractController
     #[Route('/chat', name: 'chat')]
     public function index(Request $request): Response
     {
-        $response = null;
+        $response =$raw= null;
         $prompt = '';
         if ($request->isMethod('POST')) {
             $prompt = (string) $request->request->get('prompt', '');
             if ($prompt !== '') {
                 $execution = $this->agent->call($prompt);
+//                $raw=$execution->getRawResult();
                 $response = $execution->getContent();
             }
         }
 
-        return $this->render('chat/index.html.twig', [
+        return $this->render('chat.html.twig', [
             'prompt' => $prompt,
             'response' => $response,
         ]);
