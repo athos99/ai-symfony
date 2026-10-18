@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat AI{% endblock %}
+
+{% block body %}
+    <h1>Chat AI</h1>
+    <form method="post">
+        <textarea name="prompt" rows="4" cols="60">{{ prompt }}</textarea>
+        <br>
+        <button type="submit">Envoyer</button>
+    </form>
+
+    {% if response is not null %}
+        <h2>Réponse</h2>
+        <pre>{{ response }}</pre>
+    {% endif %}
+{% endblock %}
