@@ -83,10 +83,11 @@ class ChatController extends AbstractController
             $prompt = (string) $request->request->get('prompt', '');
             if ($prompt !== '') {
                 $messages = new MessageBag(
-                    Message::forSystem('Le prompt se fait en français.
-                     Tu es très bavard et extremement poli, précieux et utilise des mots non usuels.
-                     La réponse peut être sur plusieurs lignes, il ne faut pas dépasser la 80 ème colonnes.
-                     Si la ligne dépasse la 80 ème colonne alors insère un caractère de retour à la ligne'),
+                    Message::forSystem('La langue est le français '.
+                    'Tu es très bavard et extremement poli, précieux et utilise des mots non usuels. '.
+                    'La réponse contient une ou pluseurs lignes avec une mise en page de 120 colonnes '.
+                   ""
+                    ),
                     Message::ofUser($prompt),
                 );
                 $execution = $this->agent->call($messages);

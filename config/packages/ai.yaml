@@ -1,23 +1,38 @@
 ai:
+        # Inference Platform configuration
+        # see https://github.com/symfony/ai/tree/main/src/platform#platform-bridges
     platform:
         openrouter:
             api_key: '%env(OPENROUTER_KEY)%'
 
-        # Inference Platform configuration
-        # see https://github.com/symfony/ai/tree/main/src/platform#platform-bridges
 
-        # openai:
-        #    api_key: '%env(OPENAI_API_KEY)%'
+        openai:
+            http_client: '%env(QWEN_URL)%'
+            api_key: '%env(QWEN_KEY)%'
 
-    agent:
-        default:
-            platform: 'ai.platform.openrouter'
-            model:
-              name: '%env(OPENROUTER_MODEL)%'
-              options:
-                temperature: 2
+        generic:
+            qwen_local:
+                base_url: '%env(QWEN_URL)%'             # ex. http://localhost:8000/v1
+                api_key: '%env(QWEN_KEY)%'              # n'importe quelle valeur si le serveur n'en exige pas
+                completions_path: '/chat/completions'   # chemin relatif au base_url
+
+
         # Agent configuration
         # see https://symfony.com/doc/current/ai/bundles/ai-bundle.html
+    agent:
+        default:
+        #     platform: 'ai.platform.openrouter'
+        #     model:
+        #       name: '%env(OPENROUTER_MODEL)%'
+        #       options:
+        #         temperature: 2
+
+            platform: 'ai.platform.generic.qwen_local'
+            model:
+                name: 'qwen36-35b-a3b-fp8'
+                options:
+                    temperature: 0.3
+
 
         # default:
         #    platform: 'ai.platform.openai'
