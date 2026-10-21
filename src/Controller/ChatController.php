@@ -81,19 +81,28 @@ class ChatController extends AbstractController
         $info = null;
         if ($request->isMethod('POST')) {
             $prompt = (string) $request->request->get('prompt', '');
+            $reset =  $request->request->get('reset', false);
+            $session = $request->getSession();
+            if ($reset) {
+                $session->remove('chat_history');
+            }
             if ($prompt !== '') {
-                $messages = new MessageBag(
-                    Message::forSystem('La langue est le français '.
-                    'Tu es très bavard et extremement poli, précieux et utilise des mots non usuels. '.
-                    'La réponse contient une ou pluseurs lignes avec une mise en page de 120 colonnes '.
-                   ""
-                    ),
-                    Message::ofUser($prompt),
+                $history = $session->get(
+                    'chat_history',
+                    new MessageBag(Message::forSystem(
+                        'La langue est le français' .
+                            ' tu es un spécialiste php symfony et aussi symfony ai.' .
+                            //  ' Tu es très bavard et extremement poli, précieux et utilise des mots non usuels.'.
+                            ' La réponse contient une ou pluseurs lignes avec une mise en page de 120 colonnes.'
+                    ))
                 );
-                $execution = $this->agent->call($messages);
+                $history->add(Message::ofUser($prompt));
+                $execution = $this->agent->call($history);
                 $response = $execution->getContent();
                 $metadata = $execution->getMetadata()->all();
                 $info = $this->analyseMetadata($metadata);
+                $history->add(Message::ofAssistant($response));
+                $session->set('chat_history', $history);
             }
         }
 
@@ -106,6 +115,4 @@ class ChatController extends AbstractController
             'info' => $info,
         ]);
     }
-
-
 }

@@ -23,15 +23,17 @@ ai:
         default:
             platform: 'ai.platform.openrouter'
             model:
-              name: '%env(OPENROUTER_MODEL)%'
-              options:
-                temperature: 2
+                name: '%env(OPENROUTER_MODEL)%'
+                tools:
+                    - 'App\Ai\Tool\FetchUrl'
+                options:
+                    temperature: .6
 
             # platform: 'ai.platform.generic.qwen_local'
             # model:
             #     name: 'qwen36-35b-a3b-fp8'
             #     options:
-            #         temperature: 0.3
+            #         temperature: 0.1
 
 
         # default:
