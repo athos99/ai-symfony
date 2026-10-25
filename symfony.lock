@@ -98,6 +98,18 @@
             "config/packages/ai_open_router_platform.yaml"
         ]
     },
+    "symfony/ai-wikipedia-tool": {
+        "version": "0.14",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "0.1",
+            "ref": "56c57f9b4a7a2353bdc6df287944722c09f414b2"
+        },
+        "files": [
+            "config/packages/ai_wikipedia_tool.yaml"
+        ]
+    },
     "symfony/apache-pack": {
         "version": "1.0",
         "recipe": {

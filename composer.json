@@ -16,6 +16,7 @@
         "symfony/ai-bundle": "^0.14.1",
         "symfony/ai-open-ai-platform": "*",
         "symfony/ai-open-router-platform": "^0.14.0",
+        "symfony/ai-wikipedia-tool": "^0.14.0",
         "symfony/apache-pack": "*",
         "symfony/console": "8.1.*",
         "symfony/doctrine-messenger": "8.1.*",

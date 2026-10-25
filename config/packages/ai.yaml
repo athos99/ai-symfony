@@ -4,6 +4,7 @@ ai:
     platform:
         openrouter:
             api_key: '%env(OPENROUTER_KEY)%'
+            http_client: 'App\Service\LoggingHttpClient'
 
 
         openai:
@@ -24,10 +25,17 @@ ai:
             platform: 'ai.platform.openrouter'
             model:
                 name: '%env(OPENROUTER_MODEL)%'
-                tools:
-                    - 'App\Ai\Tool\FetchUrl'
                 options:
                     temperature: .6
+            prompt:
+                text: |
+                    Please answer the users question based on Wikipedia, only use information provided in the messages.
+                    If you don't know the answer, say so. Be concise and to the point. Use markdown formatting.
+                include_tools: true
+            tools:
+                - 'Symfony\AI\Agent\Bridge\Wikipedia\Wikipedia'
+#                - 'App\Ai\Tool\FetchUrl'
+            include_sources: true
 
             # platform: 'ai.platform.generic.qwen_local'
             # model:

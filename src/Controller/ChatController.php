@@ -96,12 +96,13 @@ class ChatController extends AbstractController
                             ' La réponse contient une ou pluseurs lignes avec une mise en page de 120 colonnes.'
                     ))
                 );
-                $history->add(Message::ofUser($prompt));
+                //$history->add(Message::ofUser($prompt));
+                $history=$prompt;
                 $execution = $this->agent->call($history);
                 $response = $execution->getContent();
                 $metadata = $execution->getMetadata()->all();
                 $info = $this->analyseMetadata($metadata);
-                $history->add(Message::ofAssistant($response));
+                //$history->add(Message::ofAssistant($response));
                 $session->set('chat_history', $history);
             }
         }
