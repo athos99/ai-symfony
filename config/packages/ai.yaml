@@ -27,6 +27,17 @@ ai:
                 name: '%env(OPENROUTER_MODEL)%'
                 options:
                     temperature: .6
+            tools:
+                - 'Symfony\AI\Agent\Bridge\Wikipedia\Wikipedia'
+#                - 'App\Ai\Tool\FetchUrl'
+            include_sources: true
+
+        agent3:
+            platform: 'ai.platform.openrouter'
+            model:
+                name: '%env(OPENROUTER_MODEL)%'
+                options:
+                    temperature: .6
             prompt:
                 text: |
                     Please answer the users question based on Wikipedia, only use information provided in the messages.
@@ -36,6 +47,7 @@ ai:
                 - 'Symfony\AI\Agent\Bridge\Wikipedia\Wikipedia'
 #                - 'App\Ai\Tool\FetchUrl'
             include_sources: true
+
 
             # platform: 'ai.platform.generic.qwen_local'
             # model:

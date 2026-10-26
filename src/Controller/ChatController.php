@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ChatController extends AbstractController
 {
-    public function __construct(#[Target('default')] private AgentInterface $agent) {}
+    public function __construct(#[Target('default')] private AgentInterface $agent, #[Target('agent3')] private AgentInterface $agent3 ) {}
 
 
     private function analyseMetadata(array $metadata): array
@@ -116,4 +116,49 @@ class ChatController extends AbstractController
             'info' => $info,
         ]);
     }
-}
+
+ #[Route('/chat3', name: 'chat3')]
+    public function chat3(Request $request): Response
+    {
+        $response = null;
+        $prompt = '';
+        $info = null;
+        if ($request->isMethod('POST')) {
+            $prompt = (string) $request->request->get('prompt', '');
+            $reset =  $request->request->get('reset', false);
+            $session = $request->getSession();
+            if ($reset) {
+                $session->remove('chat_history');
+            }
+            if ($prompt !== '') {
+                $history = $session->get(
+                    'chat_history',
+                    new MessageBag(Message::forSystem(
+                        'La langue est le français' .
+                            ' tu es un spécialiste php symfony et aussi symfony ai.' .
+                            //  ' Tu es très bavard et extremement poli, précieux et utilise des mots non usuels.'.
+                            ' La réponse contient une ou pluseurs lignes avec une mise en page de 120 colonnes.'
+                    ))
+                );
+                //$history->add(Message::ofUser($prompt));
+                $history=$prompt;
+                $execution = $this->agent->call($history);
+                $response = $execution->getContent();
+                $metadata = $execution->getMetadata()->all();
+                $info = $this->analyseMetadata($metadata);
+                //$history->add(Message::ofAssistant($response));
+                $session->set('chat_history', $history);
+            }
+        }
+
+
+
+
+        return $this->render('chat3.html.twig', [
+            'prompt' => $prompt,
+            'response' => $response,
+            'info' => $info,
+        ]);
+    }
+
+    }
