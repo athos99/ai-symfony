@@ -15,7 +15,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ChatController extends AbstractController
 {
-    public function __construct(#[Target('default')] private AgentInterface $agent, #[Target('agent3')] private AgentInterface $agent3 ) {}
+    public function __construct(#[Target('default')] private AgentInterface $agent,
+    #[Target('agent3')] private AgentInterface $agent3,
+    #[Target('agent4')] private AgentInterface $agent4
+    ) {}
 
 
     private function analyseMetadata(array $metadata): array
@@ -84,26 +87,25 @@ class ChatController extends AbstractController
             $reset =  $request->request->get('reset', false);
             $session = $request->getSession();
             if ($reset) {
-                $session->remove('chat_history');
+                $session->remove('chat_history2');
             }
             if ($prompt !== '') {
                 $history = $session->get(
-                    'chat_history',
+                    'chat_history2',
                     new MessageBag(Message::forSystem(
                         'La langue est le français' .
                             ' tu es un spécialiste php symfony et aussi symfony ai.' .
-                            //  ' Tu es très bavard et extremement poli, précieux et utilise des mots non usuels.'.
+                            ' Tu es très bavard et extremement poli, précieux et utilise des mots non usuels.' .
                             ' La réponse contient une ou pluseurs lignes avec une mise en page de 120 colonnes.'
                     ))
                 );
-                //$history->add(Message::ofUser($prompt));
-                $history=$prompt;
+                $history->add(Message::ofUser($prompt));
                 $execution = $this->agent->call($history);
                 $response = $execution->getContent();
                 $metadata = $execution->getMetadata()->all();
                 $info = $this->analyseMetadata($metadata);
-                //$history->add(Message::ofAssistant($response));
-                $session->set('chat_history', $history);
+                $history->add(Message::ofAssistant($response));
+                $session->set('chat_history2', $history);
             }
         }
 
@@ -117,7 +119,7 @@ class ChatController extends AbstractController
         ]);
     }
 
- #[Route('/chat3', name: 'chat3')]
+    #[Route('/chat3', name: 'chat3')]
     public function chat3(Request $request): Response
     {
         $response = null;
@@ -128,11 +130,11 @@ class ChatController extends AbstractController
             $reset =  $request->request->get('reset', false);
             $session = $request->getSession();
             if ($reset) {
-                $session->remove('chat_history');
+                $session->remove('chat_history3');
             }
             if ($prompt !== '') {
                 $history = $session->get(
-                    'chat_history',
+                    'chat_history3',
                     new MessageBag(Message::forSystem(
                         'La langue est le français' .
                             ' tu es un spécialiste php symfony et aussi symfony ai.' .
@@ -141,18 +143,15 @@ class ChatController extends AbstractController
                     ))
                 );
                 //$history->add(Message::ofUser($prompt));
-                $history=$prompt;
-                $execution = $this->agent->call($history);
+                $history = $prompt;
+                $execution = $this->agent3->call($history);
                 $response = $execution->getContent();
                 $metadata = $execution->getMetadata()->all();
                 $info = $this->analyseMetadata($metadata);
                 //$history->add(Message::ofAssistant($response));
-                $session->set('chat_history', $history);
+                $session->set('chat_history3', $history);
             }
         }
-
-
-
 
         return $this->render('chat3.html.twig', [
             'prompt' => $prompt,
@@ -161,4 +160,46 @@ class ChatController extends AbstractController
         ]);
     }
 
+    #[Route('/chat4', name: 'chat4')]
+    public function chat4(Request $request): Response
+    {
+        $response = null;
+        $prompt = '';
+        $info = null;
+        if ($request->isMethod('POST')) {
+            $prompt = (string) $request->request->get('prompt', '');
+            $reset =  $request->request->get('reset', false);
+            $session = $request->getSession();
+            if ($reset) {
+                $session->remove('chat_history4');
+            }
+            if ($prompt !== '') {
+                $history = $session->get(
+                    'chat_history4',
+                    new MessageBag(Message::forSystem(
+                        'La langue est le français' .
+                            //' tu es un spécialiste php symfony et aussi symfony ai.' .
+                            //  ' Tu es très bavard et extremement poli, précieux et utilise des mots non usuels.'.
+                            ' La réponse contient une ou pluseurs lignes avec une mise en page de 120 colonnes.'
+                    ))
+                );
+                //$history->add(Message::ofUser($prompt));
+                $history = $prompt;
+                $execution = $this->agent4->call($history);
+                $response = $execution->getContent();
+                $metadata = $execution->getMetadata()->all();
+                $info = $this->analyseMetadata($metadata);
+                //$history->add(Message::ofAssistant($response));
+                $session->set('chat_history4', $history);
+            }
+        }
+
+
+
+        return $this->render('chat4.html.twig', [
+            'prompt' => $prompt,
+            'response' => $response,
+            'info' => $info,
+        ]);
     }
+}

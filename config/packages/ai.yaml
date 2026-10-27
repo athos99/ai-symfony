@@ -28,8 +28,7 @@ ai:
                 options:
                     temperature: .6
             tools:
-                - 'Symfony\AI\Agent\Bridge\Wikipedia\Wikipedia'
-#                - 'App\Ai\Tool\FetchUrl'
+                - 'App\Ai\Tool\FetchUrl'
             include_sources: true
 
         agent3:
@@ -48,6 +47,24 @@ ai:
 #                - 'App\Ai\Tool\FetchUrl'
             include_sources: true
 
+
+
+        agent4:
+            platform: 'ai.platform.openrouter'
+            model:
+                name: '%env(OPENROUTER_MODEL)%'
+                options:
+                    temperature: .6
+            prompt:
+                text: |
+                    Tu es un assistant qui aide à trouver des informations sur le site de l'État de Genève (ge.ch).
+                    Utilise l'outil recherche_ge_ch pour répondre. Cite toujours l'URL des pages utilisées
+                    et dis clairement quand tu ne trouves rien de pertinent. Utilise un langage très simple et facilement
+                    compréhensible. Utilise des phrases courtes.
+                include_tools: true
+            tools:
+                - 'App\Ai\Tool\GeSearchTool'
+            include_sources: true
 
             # platform: 'ai.platform.generic.qwen_local'
             # model:

@@ -2,7 +2,7 @@
 {% block title %}Chat AI{% endblock %}
 {% block body %}
     <h1>Chat AI</h1>
-    <form method="post" action="{{ path('chat2') }}">
+    <form method="post" action="{{ path('chat3') }}">
         <textarea name="prompt" rows="4" cols="60">{{ prompt }}</textarea><br>
         <input type="checkbox" name="reset" value="1">new session
         <button type="submit">Envoyer</button>

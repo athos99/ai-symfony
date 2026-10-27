@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Ai\Tool;
 
@@ -7,7 +8,10 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[AsTool('fetch_url', 'Télécharge une page web et retourne son texte brut (maximum 8000 caractères).')]
+#[AsTool(
+    'fetch_url',
+    'Télécharge une page web et retourne son texte brut (maximum 8000 caractères).'
+)]
 final class FetchUrl
 {
     private const ALLOWED_HOSTS = ['symfony.com', 'www.php.net', 'docs.example.org'];
@@ -24,9 +28,9 @@ final class FetchUrl
     public function __invoke(string $url): string
     {
         $parts = parse_url($url);
-        if (($parts['scheme'] ?? '') !== 'https' || !in_array($parts['host'] ?? '', self::ALLOWED_HOSTS, true)) {
-            return 'Erreur : URL non autorisée.';
-        }
+        // if (($parts['scheme'] ?? '') !== 'https' || !in_array($parts['host'] ?? '', self::ALLOWED_HOSTS, true)) {
+        //     return 'Erreur : URL non autorisée.';
+        // }
 
         $response = $this->client->request('GET', $url, [
             'timeout' => 10,
